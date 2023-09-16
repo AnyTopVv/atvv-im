@@ -14,7 +14,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.6.13</spring-boot.version>
         <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
-        <fastjson.version>2.0.25</fastjson.version>
+        <fastjson.version>1.2.33</fastjson.version>
         <netty.version>4.1.90.Final</netty.version>
         <common.version>3.12.0</common.version>
         <hutool.version>5.5.1</hutool.version>
@@ -22,6 +22,8 @@
         <mybatis.version>2.2.2</mybatis.version>
         <mybatisplus.version>3.5.2</mybatisplus.version>
         <redisson.version>3.20.0</redisson.version>
+        <jwt.version>0.9.1</jwt.version>
+        <mysql.version>8.0.12</mysql.version>
     </properties>
 
     <modules>
@@ -101,6 +103,26 @@
             <dependency>
                 <groupId>com.rabbitmq</groupId>
                 <artifactId>amqp-client</artifactId>
+            </dependency>
+
+            <!--            jwt-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+
+            <!-- mysql -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-bootstrap</artifactId>
+                <version>3.0.3</version>
             </dependency>
         </dependencies>
 
