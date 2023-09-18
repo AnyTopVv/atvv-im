@@ -55,7 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         HashMap<String, String> map = new HashMap<>(2);
         map.put("token", token);
 //        存入redis
-        redisUtil.setCacheObject(RedisConstant.TOKEN_KEY+loginUser.getUser().getId(),token,12, TimeUnit.HOURS);
+        redisUtil.setCacheObject(RedisConstant.TOKEN_KEY+loginUser.getUser().getId(),token,1, TimeUnit.HOURS);
         redisUtil.setCacheObject(RedisConstant.LOGIN_KEY + loginUser.getUser().getId(), loginUser);
 
         return new ResultDto(200, "登陆成功", map);
