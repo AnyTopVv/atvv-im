@@ -1,7 +1,7 @@
 package com.atvv.im.user.filter;
 
+import com.atvv.im.entity.User;
 import com.atvv.im.user.constant.RedisConstant;
-import com.atvv.im.user.dto.LoginUser;
 import com.atvv.im.user.utils.RedisUtil;
 import com.atvv.im.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -48,13 +48,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
         //从redis中获取用户信息
         String redisKey =  RedisConstant.LOGIN_KEY + userid;
-        LoginUser loginUser = redisUtil.getCacheObject(redisKey);
-        if(Objects.isNull(loginUser)){
+        User user = redisUtil.getCacheObject(redisKey);
+        if(Objects.isNull(user)){
             throw new RuntimeException("用户未登录");
         }
         //存入SecurityContextHolder
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginUser,null,null);
+                new UsernamePasswordAuthenticationToken(user,null,null);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         //放行
         filterChain.doFilter(request, response);

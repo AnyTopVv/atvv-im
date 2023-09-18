@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * @author hjq
@@ -55,8 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         HashMap<String, String> map = new HashMap<>(2);
         map.put("token", token);
 //        存入redis
-        redisUtil.setCacheObject(RedisConstant.TOKEN_KEY+loginUser.getUser().getId(),token,1, TimeUnit.HOURS);
-        redisUtil.setCacheObject(RedisConstant.LOGIN_KEY + loginUser.getUser().getId(), loginUser);
+        redisUtil.setCacheObject(RedisConstant.LOGIN_KEY + loginUser.getUser().getId(), loginUser.getUser());
 
         return new ResultDto(200, "登陆成功", map);
     }
@@ -64,9 +63,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public ResultDto logout() {
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
 
-        redisUtil.deleteObject(RedisConstant.LOGIN_KEY+ loginUser.getUser().getId());
+        redisUtil.deleteObject(RedisConstant.LOGIN_KEY+ user.getId());
         return new ResultDto(200,"退出成功");
     }
 }
