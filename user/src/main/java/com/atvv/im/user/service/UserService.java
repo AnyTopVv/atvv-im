@@ -21,4 +21,19 @@ public interface UserService extends IService<User> {
      * @return 结果
      */
     ResultDto logout();
+
+
+    /**
+     * 刷新token
+     * @param refreshToken refreshToken
+     * @return 结果
+     */
+    ResultDto refreshToken(String refreshToken);
+
+    /**
+     * 注册
+     * @param user 用户信息
+     * @return 结果
+     */
+    ResultDto register(User user);
 }

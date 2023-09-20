@@ -1,10 +1,7 @@
 package com.atvv.im.utils;
 
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 
 
 import javax.crypto.SecretKey;
@@ -21,7 +18,7 @@ public class JwtUtil {
     /**
      * token过期时间 12小时
      */
-    public static final Long EXPIRED_TIME =3600 * 1000L;
+    public static final Long EXPIRED_TIME =60 * 1000L;
 
     /**
      * 私钥
@@ -95,12 +92,17 @@ public class JwtUtil {
      * @return
      * @throws Exception
      */
-    public static Claims parseJWT(String jwt) throws Exception {
+    public static Claims parseJWT(String jwt)  {
         SecretKey secretKey = generalKey();
-        return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(jwt)
-                .getBody();
+        try{
+            return Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(jwt)
+                    .getBody();
+        }catch (ExpiredJwtException e){
+            return e.getClaims();
+        }
+
     }
 
 }

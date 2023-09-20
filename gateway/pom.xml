@@ -43,7 +43,11 @@
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </exclusion>
             </exclusions>
-            <version>2.2.6.RELEASE</version>
+        </dependency>
+        <!-- load-balancer -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-loadbalancer</artifactId>
         </dependency>
     </dependencies>
 
