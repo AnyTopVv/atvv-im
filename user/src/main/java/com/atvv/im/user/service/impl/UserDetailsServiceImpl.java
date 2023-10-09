@@ -3,7 +3,9 @@ package com.atvv.im.user.service.impl;
 import com.atvv.im.entity.User;
 import com.atvv.im.mapper.UserMapper;
 import com.atvv.im.user.dto.LoginUser;
+import com.atvv.im.user.exception.ServiceException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +19,7 @@ import java.util.Objects;
  * @date 2023/9/14 20:01
  */
 @Service
+@Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private UserMapper userMapper;
@@ -30,7 +33,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userMapper.selectOne(wrapper);
         //如果查询不到数据就通过抛出异常来给出提示
         if(Objects.isNull(user)){
-            throw new RuntimeException("用户名或密码错误");
+            log.info("用户{}不存在",username);
+            throw new ServiceException("用户不存在");
         }
 
         //封装成UserDetails对象返回

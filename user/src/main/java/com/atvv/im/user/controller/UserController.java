@@ -21,7 +21,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResultDto login(@RequestBody User user){
+    public ResultDto<?> login(@RequestBody User user){
         return userService.login(user);
     }
 
@@ -31,17 +31,17 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public ResultDto logout(){
+    public ResultDto<?> logout(){
         return userService.logout();
     }
 
     @GetMapping("/refresh")
-    public ResultDto refreshToken(@RequestHeader String refresh_token){
+    public ResultDto<?> refreshToken(@RequestHeader String refresh_token){
         return userService.refreshToken(refresh_token);
     }
 
     @PostMapping("/register")
-    public ResultDto register(@RequestBody User user){
+    public ResultDto<?> register(@RequestBody User user){
         return userService.register(user);
     }
 

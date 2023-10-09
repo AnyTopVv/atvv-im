@@ -14,13 +14,13 @@ public interface UserService extends IService<User> {
      * @param user 用户信息
      * @return 结果
      */
-    ResultDto login(User user);
+    ResultDto<?> login(User user);
 
     /**
      * 退出
      * @return 结果
      */
-    ResultDto logout();
+    ResultDto<?> logout();
 
 
     /**
@@ -28,12 +28,12 @@ public interface UserService extends IService<User> {
      * @param refreshToken refreshToken
      * @return 结果
      */
-    ResultDto refreshToken(String refreshToken);
+    ResultDto<?> refreshToken(String refreshToken);
 
     /**
      * 注册
      * @param user 用户信息
      * @return 结果
      */
-    ResultDto register(User user);
+    ResultDto<?> register(User user);
 }
