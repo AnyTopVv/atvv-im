@@ -1,22 +1,16 @@
 server:
-  port: 9527
+  port: 9001
 
 spring:
   application:
-    name: gateway-service
+    name: user-service
+
 
   cloud:
     nacos:
       discovery:
         server-addr: 10.21.22.100:8848
         group: DEFAULT_GROUP
-
-    gateway:
-      routes:
-        - id: user_routh
-          uri: lb://user-service
-          predicates:
-            - Path=/user/**
 
 
   datasource:
