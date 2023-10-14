@@ -21,7 +21,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResultDto<?> login(@RequestBody User user){
+    public ResultDto<?> login(User user){
         return userService.login(user);
     }
 
@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResultDto<?> register(@RequestBody User user){
+    public ResultDto<?> register(User user){
         return userService.register(user);
     }
 
