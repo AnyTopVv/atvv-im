@@ -29,7 +29,7 @@
 
     <modules>
         <module>user</module>
-        <module>chat</module>
+        <module>tcp</module>
         <module>gateway</module>
         <module>common</module>
     </modules>
