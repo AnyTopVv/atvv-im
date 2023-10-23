@@ -15,7 +15,6 @@ import java.io.Serializable;
 public class MessagePack<T> implements Serializable {
     private String userId;
 
-    private Integer appId;
 
     /**
      * 接收方
@@ -32,10 +31,6 @@ public class MessagePack<T> implements Serializable {
      */
     private String messageId;
 
-    /**
-     * 客户端设备唯一标识
-     */
-    private String imei;
 
     private Integer command;
 

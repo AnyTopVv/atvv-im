@@ -1,5 +1,6 @@
 package com.atvv.atvvim.tcp.server;
 
+import com.atvv.atvvim.tcp.handler.HeartBeatHandler;
 import com.atvv.atvvim.tcp.handler.NettyServerHandler;
 import com.atvv.atvvim.tcp.handler.WebSocketMessageDecoderHandler;
 import com.atvv.atvvim.tcp.handler.WebSocketMessageEncoderHandler;
@@ -15,7 +16,10 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  *  IM服务启动server
@@ -62,6 +66,10 @@ public class ImServer {
                          * 对于websocket来讲，都是以frames进行传输的，不同的数据类型对应的frames也不同
                          */
                         pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
+                        // 心跳检测 保活
+                        pipeline.addLast(new IdleStateHandler(
+                                3, 5, 7));
+                        pipeline.addLast(new HeartBeatHandler(config.getHeartBeatTime()));
                         pipeline.addLast(new WebSocketMessageDecoderHandler());
                         pipeline.addLast(new WebSocketMessageEncoderHandler());
                         pipeline.addLast(new NettyServerHandler());

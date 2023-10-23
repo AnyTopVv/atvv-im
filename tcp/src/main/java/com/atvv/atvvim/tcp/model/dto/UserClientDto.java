@@ -17,8 +17,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserClientDto {
-    private Integer appId;
     private String userId;
     private Integer clientType;
-    private String imei;
 }

@@ -53,10 +53,7 @@ public class UserChannelRepository {
             // 双向绑定
             // channel -> user property
             channel.attr(AttributeKey.valueOf(ChannelConstants.USER_ID)).set(userClientDto.getUserId());
-            channel.attr(AttributeKey.valueOf(ChannelConstants.APP_ID)).set(userClientDto.getAppId());
             channel.attr(AttributeKey.valueOf(ChannelConstants.CLIENT_TYPE)).set(userClientDto.getClientType());
-            channel.attr(AttributeKey.valueOf(ChannelConstants.IMEI)).set(userClientDto.getImei());
-            channel.attr(AttributeKey.valueOf(ChannelConstants.CLIENT_IMEI)).set(userClientDto.getClientType() + ":" + userClientDto.getImei());
 
             // userChannelKey -> channel
             USER_CHANNEL.put(userClientDto, channel);
@@ -71,27 +68,21 @@ public class UserChannelRepository {
      */
     public static UserClientDto getUserInfo(Channel channel) {
         String userId = (String) channel.attr(AttributeKey.valueOf(ChannelConstants.USER_ID)).get();
-        Integer appId = (Integer) channel.attr(AttributeKey.valueOf(ChannelConstants.APP_ID)).get();
         Integer clientType = (Integer) channel.attr(AttributeKey.valueOf(ChannelConstants.CLIENT_TYPE)).get();
-        String imei = (String) channel.attr(AttributeKey.valueOf(ChannelConstants.IMEI)).get();
-        return new UserClientDto(appId, userId, clientType, imei);
+        return new UserClientDto(userId, clientType);
     }
 
     /**
      * 根据用户的一些基本信息获取到这个channel
      *
-     * @param appId      app的id
      * @param userId     用户的id
      * @param clientType 客户端类型
-     * @param imei       设备imei
      * @return 用户的channel
      */
-    public static Channel getUserChannel(Integer appId, String userId, Integer clientType, String imei) {
+    public static Channel getUserChannel(String userId, Integer clientType) {
         UserClientDto dto = new UserClientDto();
         dto.setUserId(userId);
-        dto.setAppId(appId);
         dto.setClientType(clientType);
-        dto.setImei(imei);
         if (!USER_CHANNEL.containsKey(dto)) {
             log.error("channel 通道 没有 [{}] 信息", JSONObject.toJSONString(dto));
             return null;
@@ -229,7 +220,7 @@ public class UserChannelRepository {
         Set<UserClientDto> channelInfos = USER_CHANNEL.keySet();
         List<Channel> channels = new ArrayList<>();
         channelInfos.forEach(channel -> {
-            if (appId.equals(channel.getAppId()) && userId.equals(channel.getUserId())) {
+            if (userId.equals(channel.getUserId())) {
                 channels.add(USER_CHANNEL.get(channel));
             }
         });
