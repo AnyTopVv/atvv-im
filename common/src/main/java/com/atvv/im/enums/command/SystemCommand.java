@@ -1,11 +1,7 @@
 package com.atvv.im.enums.command;
 
 /**
- * @ClassName ImSystemCommand
- * @Description
- * @date 2023/4/24 16:38
- * @Author yanceysong
- * @Version 1.0
+ * 系统事件
  */
 public enum SystemCommand implements Command {
     /**

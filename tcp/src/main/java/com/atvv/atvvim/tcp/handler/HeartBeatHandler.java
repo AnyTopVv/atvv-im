@@ -10,11 +10,7 @@ import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @ClassName HeartBeatHandler
- * @Description
- * @date 2023/4/25 14:35
- * @Author yanceysong
- * @Version 1.0
+ * 心跳处理器
  */
 @Slf4j
 public class HeartBeatHandler extends ChannelInboundHandlerAdapter {

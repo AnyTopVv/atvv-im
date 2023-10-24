@@ -4,11 +4,8 @@ package com.atvv.im.enums.device;
 import com.atvv.im.constant.CodeAdapter;
 
 /**
- * @ClassName ClientType
- * @Description
- * @date 2023/4/27 10:15
- * @Author yanceysong
- * @Version 1.0
+ * 端类型
+ * 目前仅支持WEB端
  */
 public enum ClientType implements CodeAdapter {
     WEBAPI(0, "webapi"),

@@ -6,11 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @ClassName UserClientDto
- * @Description
- * @date 2023/4/25 11:18
- * @Author yanceysong
- * @Version 1.0
+ * 用户端
  */
 @Data
 @AllArgsConstructor

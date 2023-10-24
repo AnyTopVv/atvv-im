@@ -1,11 +1,7 @@
 package com.atvv.im.enums.command;
 
 /**
- * @ClassName MessageCommand
- * @Description
- * @date 2023/5/16 9:39
- * @Author yanceysong
- * @Version 1.0
+ * 聊天消息事件
  */
 public enum MessageCommand implements Command {
     //单聊消息 1103

@@ -1,11 +1,8 @@
 package com.atvv.im.enums.command;
 
 /**
- * @ClassName CommandType
- * @Description
- * @date 2023/5/31 13:39
- * @Author yanceysong
- * @Version 1.0
+ * command类型
+ * 决定消息要走哪个消息队列
  */
 public enum CommandType {
     USER("4"),

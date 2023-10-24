@@ -38,6 +38,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
      */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
+        //使用策略模式重构
         if (msg.getMessageHeader().getCommand().equals(SystemCommand.COMMAND_LOGIN.getCommand())){
             LoginPack loginPack = JSON.parseObject(JSONObject.toJSONString(msg.getMessagePack()),
                     new TypeReference<LoginPack>() {}.getType());
