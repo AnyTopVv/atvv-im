@@ -1,6 +1,6 @@
 package com.atvv.im.mapper;
 
-import com.atvv.im.entity.User;
+import com.atvv.im.model.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

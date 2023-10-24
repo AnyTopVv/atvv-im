@@ -1,6 +1,6 @@
 package com.atvv.im.user.dto;
 
-import com.atvv.im.entity.User;
+import com.atvv.im.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

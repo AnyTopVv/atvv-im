@@ -1,11 +1,10 @@
 package com.atvv.im.gateway.filter;
 
 
-import com.atvv.im.entity.User;
+import com.atvv.im.model.User;
 import com.atvv.im.gateway.constant.StringConstant;
 import com.atvv.im.gateway.exception.ServiceException;
 import com.atvv.im.gateway.utils.RedisUtil;
-import com.atvv.im.gateway.utils.ResponseUtil;
 import com.atvv.im.utils.JwtUtil;
 
 import io.jsonwebtoken.Claims;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
-import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;

@@ -1,23 +1,20 @@
 package com.atvv.atvvim.tcp.handler;
 
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
-import com.atvv.atvvim.tcp.codec.Message;
-import com.atvv.atvvim.tcp.codec.MessagePack;
-import com.atvv.atvvim.tcp.codec.pack.command.LoginPack;
-import com.atvv.atvvim.tcp.constants.ChannelConstants;
-import com.atvv.atvvim.tcp.model.dto.UserClientDto;
+import com.atvv.atvvim.tcp.strategy.command.CommandExecution;
+import com.atvv.atvvim.tcp.strategy.command.CommandFactory;
+import com.atvv.atvvim.tcp.strategy.command.SystemCommandStrategy;
+import com.atvv.im.model.Message;
 import com.atvv.atvvim.tcp.utils.UserChannelRepository;
-import com.atvv.im.enums.command.MessageCommand;
-import com.atvv.im.enums.command.SystemCommand;
-import com.atvv.im.enums.device.ClientType;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.pool2.BasePooledObjectFactory;
+import org.apache.commons.pool2.PooledObject;
+import org.apache.commons.pool2.impl.DefaultPooledObject;
+import org.apache.commons.pool2.impl.GenericObjectPool;
+
+import java.util.UUID;
 
 /**
  * netty server处理器
@@ -25,9 +22,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
 
-    public NettyServerHandler() {
+    private final Integer brokerId;
 
+    public NettyServerHandler() {
+        int uuid= UUID.randomUUID().toString().replaceAll("-","").hashCode();
+        brokerId = uuid < 0 ? -uuid : uuid;
     }
+
+    /**
+     * CommandExecution对象池，避免重复创建对象
+     */
+    private final GenericObjectPool<CommandExecution> commandExecutionRequestPool
+            = new GenericObjectPool<>(new CommandExecutionFactory());
 
     /**
      * 有读消息来的时候
@@ -38,42 +44,26 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
      */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
-        //使用策略模式重构
-        if (msg.getMessageHeader().getCommand().equals(SystemCommand.COMMAND_LOGIN.getCommand())){
-            LoginPack loginPack = JSON.parseObject(JSONObject.toJSONString(msg.getMessagePack()),
-                    new TypeReference<LoginPack>() {}.getType());
-            //解析到msg组装UserDTO
-            UserClientDto userClientDto = new UserClientDto();
-            userClientDto.setUserId(loginPack.getUserId());
-            userClientDto.setClientType(msg.getMessageHeader().getClientType());
-
-            // channel 设置属性
-            ctx.channel().attr(AttributeKey.valueOf(ChannelConstants.USER_ID)).set(userClientDto.getUserId());
-            ctx.channel().attr(AttributeKey.valueOf(ChannelConstants.CLIENT_TYPE)).set(userClientDto.getClientType());
-            UserChannelRepository.bind(userClientDto,ctx.channel());
-            log.info("登录成功：userId: {}",loginPack.getUserId());
-        }else if (msg.getMessageHeader().getCommand().equals(MessageCommand.MSG_P2P.getCommand())){
-            JSONObject jsonObject = JSON.parseObject(JSONObject.toJSONString(msg.getMessagePack()));
-            String sendId = jsonObject.getString("sendId");
-            String receiverId = jsonObject.getString("receiverId");
-            Channel userChannel = UserChannelRepository.getUserChannel(receiverId, ClientType.WEB.getCode());
-            if (userChannel != null) {
-                MessagePack<Object> messagePack = new MessagePack<>();
-                messagePack.setUserId(sendId);
-                messagePack.setReceiverId(sendId);
-                messagePack.setCommand(msg.getMessageHeader().getCommand());
-                messagePack.setData(msg.getMessagePack());
-                userChannel.writeAndFlush(messagePack);
-            }else {
-                ctx.channel().writeAndFlush("用户未在线");
+        //使用策略模式
+        Integer command = parseCommand(msg);
+        SystemCommandStrategy commandStrategy = CommandFactory.getCommandStrategy(command);
+        CommandExecution commandExecution = null;
+        try{
+            //从对象池获取对象
+            commandExecution = commandExecutionRequestPool.borrowObject();
+            commandExecution.setCtx(ctx);
+            commandExecution.setBrokeId(brokerId);
+            commandExecution.setMsg(msg);
+            if (commandStrategy != null) {
+                // 执行策略
+                commandStrategy.systemStrategy(commandExecution);
             }
-        }else if(msg.getMessageHeader().getCommand().equals(SystemCommand.COMMAND_PING.getCommand())){
-            ctx.channel()
-                    .attr(AttributeKey
-                            .valueOf(ChannelConstants.READ_TIME))
-                    .set(System.currentTimeMillis());
+        } finally {
+            // 将对象归还给对象池
+            if (commandExecution != null) {
+                commandExecutionRequestPool.returnObject(commandExecution);
+            }
         }
-        System.out.println(msg);
     }
 
     /**
@@ -122,5 +112,19 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
         return msg.getMessageHeader().getCommand();
     }
 
+    /**
+     * CommandExecution 对象工厂
+     */
+    private static class CommandExecutionFactory extends BasePooledObjectFactory<CommandExecution> {
+        @Override
+        public CommandExecution create() throws Exception {
+            return new CommandExecution();
+        }
+
+        @Override
+        public PooledObject<CommandExecution> wrap(CommandExecution obj) {
+            return new DefaultPooledObject<>(obj);
+        }
+    }
 
 }

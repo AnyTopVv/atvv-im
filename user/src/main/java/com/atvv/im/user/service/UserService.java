@@ -1,7 +1,7 @@
 package com.atvv.im.user.service;
 
 import com.atvv.im.dto.ResultDto;
-import com.atvv.im.entity.User;
+import com.atvv.im.model.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

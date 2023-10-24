@@ -1,4 +1,4 @@
-package com.atvv.atvvim.tcp.codec;
+package com.atvv.im.model.pack;
 
 import lombok.Data;
 

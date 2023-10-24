@@ -1,7 +1,7 @@
 package com.atvv.im.user.service.impl;
 
 import com.atvv.im.dto.ResultDto;
-import com.atvv.im.entity.User;
+import com.atvv.im.model.User;
 import com.atvv.im.mapper.UserMapper;
 import com.atvv.im.user.constant.RedisConstant;
 import com.atvv.im.user.dto.LoginUser;

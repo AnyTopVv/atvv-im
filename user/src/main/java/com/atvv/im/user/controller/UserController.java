@@ -1,7 +1,7 @@
 package com.atvv.im.user.controller;
 
 import com.atvv.im.dto.ResultDto;
-import com.atvv.im.entity.User;
+import com.atvv.im.model.User;
 import com.atvv.im.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

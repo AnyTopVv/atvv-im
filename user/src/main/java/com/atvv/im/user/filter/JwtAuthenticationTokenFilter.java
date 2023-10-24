@@ -1,6 +1,6 @@
 package com.atvv.im.user.filter;
 
-import com.atvv.im.entity.User;
+import com.atvv.im.model.User;
 import com.atvv.im.user.constant.RedisConstant;
 import com.atvv.im.user.exception.ServiceException;
 import com.atvv.im.user.utils.RedisUtil;

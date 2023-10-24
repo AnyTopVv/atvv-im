@@ -66,14 +66,12 @@ public class ImServer {
                          * 对于websocket来讲，都是以frames进行传输的，不同的数据类型对应的frames也不同
                          */
                         pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
-                        // 心跳检测 保活
-                        pipeline.addLast(new IdleStateHandler(
-                                3, 5, 7));
-                        pipeline.addLast(new HeartBeatHandler(config.getHeartBeatTime()));
+                        // 心跳检测 保活 (开发调试暂不启用)
+//                        pipeline.addLast(new IdleStateHandler(3, 5, 7));
+//                        pipeline.addLast(new HeartBeatHandler(config.getHeartBeatTime()));
                         pipeline.addLast(new WebSocketMessageDecoderHandler());
                         pipeline.addLast(new WebSocketMessageEncoderHandler());
                         pipeline.addLast(new NettyServerHandler());
-
                     }
                 });
     }
