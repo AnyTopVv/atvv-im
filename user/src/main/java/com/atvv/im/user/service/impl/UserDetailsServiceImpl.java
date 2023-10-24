@@ -1,6 +1,6 @@
 package com.atvv.im.user.service.impl;
 
-import com.atvv.im.entity.User;
+import com.atvv.im.model.User;
 import com.atvv.im.mapper.UserMapper;
 import com.atvv.im.user.dto.LoginUser;
 import com.atvv.im.user.exception.ServiceException;

@@ -25,11 +25,12 @@
         <redisson.version>3.20.0</redisson.version>
         <jwt.version>0.9.1</jwt.version>
         <mysql.version>8.0.12</mysql.version>
+        <commons-pool2.version>2.11.1</commons-pool2.version>
     </properties>
 
     <modules>
         <module>user</module>
-        <module>chat</module>
+        <module>tcp</module>
         <module>gateway</module>
         <module>common</module>
     </modules>
@@ -94,6 +95,13 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${common.version}</version>
+            </dependency>
+
+            <!-- commons-pool2 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${commons-pool2.version}</version>
             </dependency>
 
             <!-- netty -->
