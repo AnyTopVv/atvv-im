@@ -1,4 +1,4 @@
-package com.atvv.im.model;
+package com.atvv.im.model.po;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

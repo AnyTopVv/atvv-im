@@ -1,6 +1,6 @@
 package com.atvv.im.user.handler;
 
-import com.atvv.im.dto.ResultDto;
+import com.atvv.im.model.vo.ResponseVO;
 import com.atvv.im.user.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,19 +17,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ServiceException.class)
-    public ResultDto<?> serviceException(ServiceException serviceException){
-        return new ResultDto<>(serviceException.getErrorCode(),serviceException.getErrorMessage());
+    public ResponseVO<?> serviceException(ServiceException serviceException){
+        return new ResponseVO<>(serviceException.getErrorCode(),serviceException.getErrorMessage());
     }
 
     @ExceptionHandler(value = {InternalAuthenticationServiceException.class,BadCredentialsException.class})
-    public ResultDto<?> internalAuthenticationServiceException(Exception exception){
-        return new ResultDto<>(200,exception.getMessage());
+    public ResponseVO<?> internalAuthenticationServiceException(Exception exception){
+        return new ResponseVO<>(200,exception.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
-    public ResultDto<?> exception(Exception exception){
+    public ResponseVO<?> exception(Exception exception){
         log.error("发生未知错误",exception);
-        return new ResultDto<>(500,"系统错误");
+        return new ResponseVO<>(500,"系统错误");
     }
 
 

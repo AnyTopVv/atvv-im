@@ -1,4 +1,4 @@
-package com.atvv.im.dto;
+package com.atvv.im.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,19 +11,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResultDto<T> {
+public class ResponseVO<T> {
     private Integer code;
 
     private String msg;
 
     private T data;
 
-    public ResultDto(Integer code, String msg) {
+    public ResponseVO(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public ResultDto(Integer code, T data) {
+    public ResponseVO(Integer code, T data) {
         this.code = code;
         this.data = data;
     }

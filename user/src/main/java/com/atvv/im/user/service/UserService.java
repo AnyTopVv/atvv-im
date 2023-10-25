@@ -1,7 +1,7 @@
 package com.atvv.im.user.service;
 
-import com.atvv.im.dto.ResultDto;
-import com.atvv.im.model.User;
+import com.atvv.im.model.vo.ResponseVO;
+import com.atvv.im.model.po.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -14,13 +14,13 @@ public interface UserService extends IService<User> {
      * @param user 用户信息
      * @return 结果
      */
-    ResultDto<?> login(User user);
+    ResponseVO<?> login(User user);
 
     /**
      * 退出
      * @return 结果
      */
-    ResultDto<?> logout();
+    ResponseVO<?> logout();
 
 
     /**
@@ -28,12 +28,12 @@ public interface UserService extends IService<User> {
      * @param refreshToken refreshToken
      * @return 结果
      */
-    ResultDto<?> refreshToken(String refreshToken);
+    ResponseVO<?> refreshToken(String refreshToken);
 
     /**
      * 注册
      * @param user 用户信息
      * @return 结果
      */
-    ResultDto<?> register(User user);
+    ResponseVO<?> register(User user);
 }

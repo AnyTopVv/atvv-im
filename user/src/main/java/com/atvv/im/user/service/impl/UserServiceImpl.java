@@ -1,7 +1,7 @@
 package com.atvv.im.user.service.impl;
 
-import com.atvv.im.dto.ResultDto;
-import com.atvv.im.model.User;
+import com.atvv.im.model.vo.ResponseVO;
+import com.atvv.im.model.po.User;
 import com.atvv.im.mapper.UserMapper;
 import com.atvv.im.user.constant.RedisConstant;
 import com.atvv.im.user.dto.LoginUser;
@@ -44,7 +44,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public ResultDto<?> login(User user) {
+    public ResponseVO<?> login(User user) {
 //      AuthenticationManager authenticate  进行用户认证
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
@@ -66,21 +66,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         redisUtil.setCacheObject(RedisConstant.LOGIN_KEY + userId, loginUser.getUser());
         redisUtil.setCacheObject(RedisConstant.REFRESH_TOKEN_KEY+userId,refreshToken);
         log.info("用户{}登录成功",userId);
-        return new ResultDto<>(200, "登陆成功", map);
+        return new ResponseVO<>(200, "登陆成功", map);
     }
 
     @Override
-    public ResultDto<?> logout() {
+    public ResponseVO<?> logout() {
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         redisUtil.deleteObject(RedisConstant.REFRESH_TOKEN_KEY+user.getId());
         redisUtil.deleteObject(RedisConstant.LOGIN_KEY+ user.getId());
         log.info("用户{}退出成功",user.getId());
-        return new ResultDto<>(200,"退出成功");
+        return new ResponseVO<>(200,"退出成功");
     }
 
     @Override
-    public ResultDto<?> refreshToken(String refreshToken) {
+    public ResponseVO<?> refreshToken(String refreshToken) {
         String userId = JwtUtil.parseJWT(refreshToken).getSubject();
         String oldRefreshToken = redisUtil.getCacheObject(RedisConstant.REFRESH_TOKEN_KEY+userId);
         if (oldRefreshToken==null||!oldRefreshToken.equals(refreshToken)){
@@ -95,11 +95,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         map.put("refresh_token",newRefreshToken);
         redisUtil.setCacheObject(RedisConstant.REFRESH_TOKEN_KEY+userId,newRefreshToken);
         log.info("用户{}刷新token成功",userId);
-        return new ResultDto<>(200,"刷新成功",map);
+        return new ResponseVO<>(200,"刷新成功",map);
     }
 
     @Override
-    public ResultDto<?> register(User user) {
+    public ResponseVO<?> register(User user) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getName,user.getName());
         if (userMapper.selectOne(wrapper)!=null){
@@ -109,6 +109,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userMapper.insert(user);
         log.info("用户{}注册成功",user.getName());
-        return new ResultDto<>(200,"注册成功");
+        return new ResponseVO<>(200,"注册成功");
     }
 }

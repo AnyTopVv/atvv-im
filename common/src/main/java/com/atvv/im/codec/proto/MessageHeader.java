@@ -1,4 +1,4 @@
-package com.atvv.im.model;
+package com.atvv.im.codec.proto;
 
 import lombok.Data;
 

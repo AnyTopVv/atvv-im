@@ -1,7 +1,7 @@
 package com.atvv.im.gateway.handler;
 
 
-import com.atvv.im.dto.ResultDto;
+import com.atvv.im.model.vo.ResponseVO;
 import com.atvv.im.gateway.exception.ServiceException;
 import com.atvv.im.gateway.utils.MapUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +79,7 @@ public class GlobalExceptionHandler extends DefaultErrorWebExceptionHandler {
     }
 
     private Map<String, Object> response(Integer code, String errorMessage) {
-        ResultDto<Object> resultDto = new ResultDto<>(code, errorMessage);
+        ResponseVO<Object> resultDto = new ResponseVO<>(code, errorMessage);
         return MapUtil.beanToMap(resultDto);
     }
 }

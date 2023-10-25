@@ -1,7 +1,7 @@
 package com.atvv.im.gateway.filter;
 
 
-import com.atvv.im.model.User;
+import com.atvv.im.model.po.User;
 import com.atvv.im.gateway.constant.StringConstant;
 import com.atvv.im.gateway.exception.ServiceException;
 import com.atvv.im.gateway.utils.RedisUtil;
