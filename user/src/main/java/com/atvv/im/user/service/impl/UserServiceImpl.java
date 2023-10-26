@@ -1,16 +1,14 @@
 package com.atvv.im.user.service.impl;
 
-import com.atvv.im.model.vo.ResponseVO;
-import com.atvv.im.model.po.User;
-import com.atvv.im.mapper.UserMapper;
 import com.atvv.im.user.constant.RedisConstant;
-import com.atvv.im.user.dto.LoginUser;
-import com.atvv.im.user.exception.ServiceException;
+import com.atvv.im.user.exception.UserServiceException;
 import com.atvv.im.user.service.UserService;
 import com.atvv.im.user.utils.RedisUtil;
-import com.atvv.im.utils.JwtUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.atvv.im.common.model.vo.ResponseVO;
+import com.atvv.im.common.model.po.User;
+import com.atvv.im.common.dao.UserDao;
+import com.atvv.im.user.model.dto.LoginUser;
+import com.atvv.im.common.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,9 +28,9 @@ import java.util.Objects;
  */
 @Service
 @Slf4j
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+public class UserServiceImpl implements UserService {
     @Resource
-    private UserMapper userMapper;
+    private UserDao userDao;
 
     @Resource
     private AuthenticationManager authenticationManager;
@@ -51,7 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 //        没通过，给出提示
         if (Objects.isNull(authenticate)) {
-            throw new ServiceException(200,"登录失败");
+            throw new UserServiceException(200,"登录失败");
         }
 //        通过，生成jwt，存储用户信息
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
@@ -85,7 +83,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String oldRefreshToken = redisUtil.getCacheObject(RedisConstant.REFRESH_TOKEN_KEY+userId);
         if (oldRefreshToken==null||!oldRefreshToken.equals(refreshToken)){
             log.info("用户{}refreshToken错误",userId);
-            throw new ServiceException(200,"refresh_token错误");
+            throw new UserServiceException(200,"refresh_token错误");
         }
 
         String newRefreshToken = JwtUtil.createJWT(userId, 600 * 1000L);
@@ -100,14 +98,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public ResponseVO<?> register(User user) {
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getName,user.getName());
-        if (userMapper.selectOne(wrapper)!=null){
+        if (Objects.nonNull(userDao.findByUserName(user.getName()))){
             log.info("用户{}已存在",user.getName());
-            throw new ServiceException(200,"用户名已存在!");
+            throw new UserServiceException(200,"用户名已存在!");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userMapper.insert(user);
+        userDao.insert(user);
         log.info("用户{}注册成功",user.getName());
         return new ResponseVO<>(200,"注册成功");
     }

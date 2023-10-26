@@ -1,10 +1,9 @@
 package com.atvv.im.user.service.impl;
 
-import com.atvv.im.model.po.User;
-import com.atvv.im.mapper.UserMapper;
-import com.atvv.im.user.dto.LoginUser;
-import com.atvv.im.user.exception.ServiceException;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.atvv.im.user.exception.UserServiceException;
+import com.atvv.im.common.model.po.User;
+import com.atvv.im.common.dao.UserDao;
+import com.atvv.im.user.model.dto.LoginUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,19 +21,17 @@ import java.util.Objects;
 @Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
-    private UserMapper userMapper;
+    private UserDao userDao;
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //根据用户名查询用户信息
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getName,username);
-        User user = userMapper.selectOne(wrapper);
+        User user = userDao.findByUserName(username);
         //如果查询不到数据就通过抛出异常来给出提示
         if(Objects.isNull(user)){
             log.info("用户{}不存在",username);
-            throw new ServiceException("用户不存在");
+            throw new UserServiceException("用户不存在");
         }
 
         //封装成UserDetails对象返回

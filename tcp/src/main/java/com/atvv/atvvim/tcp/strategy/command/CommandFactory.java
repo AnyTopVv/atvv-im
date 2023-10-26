@@ -1,7 +1,7 @@
 package com.atvv.atvvim.tcp.strategy.command;
 
-import com.atvv.im.enums.command.MessageCommand;
-import com.atvv.im.enums.command.SystemCommand;
+import com.atvv.im.common.constant.enums.command.MessageCommand;
+import com.atvv.im.common.constant.enums.command.SystemCommand;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

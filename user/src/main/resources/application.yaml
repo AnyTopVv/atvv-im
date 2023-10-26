@@ -18,7 +18,11 @@ spring:
     username: root
     password: mp123456*.*
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   redis:
     host: 10.21.22.100
     port: 6380
     password: ATVV123456*.*
+
+mybatis:
+  mapper-locations: classpath*:/mapper/*.xml

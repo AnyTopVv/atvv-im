@@ -1,14 +1,13 @@
 package com.atvv.im.user.service;
 
-import com.atvv.im.model.vo.ResponseVO;
-import com.atvv.im.model.po.User;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.atvv.im.common.model.vo.ResponseVO;
+import com.atvv.im.common.model.po.User;
 
 /**
  * @author hjq
  * @date 2023/9/13 10:44
  */
-public interface UserService extends IService<User> {
+public interface UserService {
     /**
      * 登录
      * @param user 用户信息

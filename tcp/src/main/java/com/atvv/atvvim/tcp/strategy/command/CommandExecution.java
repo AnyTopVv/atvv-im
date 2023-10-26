@@ -1,6 +1,6 @@
 package com.atvv.atvvim.tcp.strategy.command;
 
-import com.atvv.im.codec.proto.Message;
+import com.atvv.im.common.codec.proto.Message;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Data;
 

@@ -3,9 +3,9 @@ package com.atvv.atvvim.tcp.strategy.command;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.atvv.atvvim.tcp.utils.UserChannelRepository;
-import com.atvv.im.enums.device.ClientType;
-import com.atvv.im.codec.proto.Message;
-import com.atvv.im.codec.proto.MessagePack;
+import com.atvv.im.common.constant.enums.device.ClientType;
+import com.atvv.im.common.codec.proto.Message;
+import com.atvv.im.common.codec.proto.MessagePack;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 

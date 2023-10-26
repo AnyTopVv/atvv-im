@@ -1,7 +1,7 @@
 package com.atvv.im.user.controller;
 
-import com.atvv.im.model.vo.ResponseVO;
-import com.atvv.im.model.po.User;
+import com.atvv.im.common.model.vo.ResponseVO;
+import com.atvv.im.common.model.po.User;
 import com.atvv.im.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

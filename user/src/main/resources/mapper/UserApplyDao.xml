@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atvv.im.user.dao.UserApplyDao">
+
+    <resultMap id="UserApply" type="com.atvv.im.common.model.po.UserApply" >
+        <result column="id" property="id" />
+        <result column="applicantId" property="applicantId" />
+        <result column="attach" property="attach" />
+        <result column="targetId" property="targetId" />
+        <result column="type" property="type" />
+        <result column="create_time" property="createTime" />
+        <result column="handle" property="handle" />
+        <result column="enable" property="enable" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ua.id,
+		ua.applicantId,
+		ua.attach,
+		ua.targetId,
+		ua.type,
+		ua.create_time,
+        ua.handle
+    </sql>
+
+    <select id="findById" resultMap="UserApply">
+        SELECT <include refid="Base_Column_List" /> FROM user_apply ua WHERE id = #{id}
+    </select>
+
+    <select id="find" resultMap="UserApply">
+        SELECT <include refid="Base_Column_List" /> FROM user_apply ua
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="applicantId != null">
+                AND applicantId = #{applicantId}
+            </if>
+            <if test="attach != null">
+                AND attach = #{attach}
+            </if>
+            <if test="targetId != null">
+                AND targetId = #{targetId}
+            </if>
+            <if test="type != null">
+                AND type = #{type}
+            </if>
+            <if test="createTime != null">
+                AND create_time = #{createTime}
+            </if>
+            <if test="handle != null">
+                AND handle = #{handle}
+            </if>
+            AND enable = 0
+        </where>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO user_apply(id, applicantId, attach, targetId, type, create_time, handle, enable)
+        VALUES (#{id}, #{applicantId}, #{attach}, #{targetId}, #{type}, #{createTime}, #{handle}, 0)
+    </insert>
+
+    <update id="updateHandle">
+        UPDATE user_apply SET handle = #{handle} WHERE id = #{id}
+    </update>
+</mapper>

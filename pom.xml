@@ -21,7 +21,6 @@
         <hutool.version>5.5.1</hutool.version>
         <druid.verison>1.2.9</druid.verison>
         <mybatis.version>2.2.2</mybatis.version>
-        <mybatisplus.version>3.5.2</mybatisplus.version>
         <redisson.version>3.20.0</redisson.version>
         <jwt.version>0.9.1</jwt.version>
         <mysql.version>8.0.12</mysql.version>
@@ -63,11 +62,6 @@
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatisplus.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
