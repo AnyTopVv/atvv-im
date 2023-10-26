@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atvv.im.common.dao.FriendShipDao">
+    <resultMap id="FriendShip" type="com.atvv.im.common.model.po.FriendShip" >
+        <result column="id" property="id" />
+        <result column="alias" property="alias" />
+        <result column="create_time" property="createTime" />
+        <result column="originId" property="originId" />
+        <result column="targetId" property="targetId" />
+        <result column="update_time" property="updateTime" />
+        <result column="enable" property="enable" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        fs.id,
+		fs.alias,
+		fs.create_time,
+		fs.originId,
+		fs.targetId,
+		fs.update_time
+    </sql>
+
+    <select id="isFriend" resultType="java.lang.Boolean">
+        SELECT COUNT(*) FROM friendship WHERE originId = #{originId} AND targetId = #{targetId} AND enable = 0
+    </select>
+
+
+    <insert id="insert">
+        INSERT INTO friendship(id,alias,create_time,originId,targetId,update_time,enable)
+        VALUES(#{id},#{alias},#{createTime},#{originId},#{targetId},#{updateTime},0)
+    </insert>
+
+
+
+</mapper>

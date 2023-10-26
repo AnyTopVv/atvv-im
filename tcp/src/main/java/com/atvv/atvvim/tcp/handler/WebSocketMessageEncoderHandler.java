@@ -1,7 +1,7 @@
 package com.atvv.atvvim.tcp.handler;
 
 import com.alibaba.fastjson.JSONObject;
-import com.atvv.im.model.pack.MessagePack;
+import com.atvv.im.common.codec.proto.MessagePack;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;

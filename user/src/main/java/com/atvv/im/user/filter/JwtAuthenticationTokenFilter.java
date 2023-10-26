@@ -1,10 +1,10 @@
 package com.atvv.im.user.filter;
 
-import com.atvv.im.model.User;
+import com.atvv.im.common.model.po.User;
 import com.atvv.im.user.constant.RedisConstant;
-import com.atvv.im.user.exception.ServiceException;
+import com.atvv.im.user.exception.UserServiceException;
 import com.atvv.im.user.utils.RedisUtil;
-import com.atvv.im.utils.JwtUtil;
+import com.atvv.im.common.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,13 +45,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             userid = claims.getSubject();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ServiceException("token非法");
+            throw new UserServiceException("token非法");
         }
         //从redis中获取用户信息
         String redisKey =  RedisConstant.LOGIN_KEY + userid;
         User user = redisUtil.getCacheObject(redisKey);
         if(Objects.isNull(user)){
-            throw new ServiceException("用户未登录");
+            throw new UserServiceException("用户未登录");
         }
         //存入SecurityContextHolder
         UsernamePasswordAuthenticationToken authenticationToken =
