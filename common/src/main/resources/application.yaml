@@ -1,9 +1,0 @@
-server:
-  port: 8080
-
-spring:
-  datasource:
-    url: jdbc:mysql://10.21.22.100:10011/atvv-im?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true&allowMultiQueries=true
-    username: root
-    password: mp123456*.*
-    driver-class-name: com.mysql.cj.jdbc.Driver

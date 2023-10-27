@@ -1,8 +1,8 @@
 package com.atvv.atvvim.tcp.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.atvv.im.model.Message;
-import com.atvv.im.model.MessageHeader;
+import com.atvv.im.common.codec.proto.Message;
+import com.atvv.im.common.codec.proto.MessageHeader;
 import io.netty.buffer.ByteBuf;
 
 /**
