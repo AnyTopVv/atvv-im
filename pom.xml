@@ -33,6 +33,7 @@
         <module>tcp</module>
         <module>gateway</module>
         <module>common</module>
+        <module>chat</module>
     </modules>
 
     <dependencyManagement>
