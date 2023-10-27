@@ -1,8 +1,11 @@
 package com.atvv.im.common.common.gateway.filter;
 
 
+import com.alibaba.fastjson.JSON;
 import com.atvv.im.common.common.gateway.exception.ServiceException;
 import com.atvv.im.common.common.gateway.utils.RedisUtil;
+import com.atvv.im.common.constant.enums.common.ErrorCode;
+import com.atvv.im.common.model.dto.UserInfo;
 import com.atvv.im.common.model.po.User;
 import com.atvv.im.common.common.gateway.constant.StringConstant;
 import com.atvv.im.common.utils.JwtUtil;
@@ -47,28 +50,28 @@ public class GateWayFilter implements GlobalFilter, Ordered {
             return chain.filter(exchange);
         }
 //        TODO：路径有效性校验
-        List<String> tokens = request.getHeaders().get(StringConstant.ACCESS_TOKEN);
+        List<String> tokens = request.getHeaders().get(StringConstant.AUTHORIZATION);
 
         if (tokens == null || tokens.size() == 0) {
             log.info("请求头缺少token:"+path);
-            throw new ServiceException("请求头缺少token!");
+            throw new ServiceException(ErrorCode.NEED_LOGIN);
         }
-        String userId = null;
-
-        Claims claims = JwtUtil.parseJWT(tokens.get(0));
+        UserInfo userInfo = null;
+        String token = tokens.get(0);
+        Claims claims = JwtUtil.parseJWT(token);
         if (claims.getExpiration().before(new Date())) {
             log.info("token已过期:"+path);
-            throw new ServiceException("token已过期!");
+            throw new ServiceException(ErrorCode.TOKEN_EXPIRED);
         }
-        userId = claims.getSubject();
+        userInfo = JSON.parseObject(claims.getSubject(), UserInfo.class);
 
-
-        User user = redisUtil.getCacheObject(StringConstant.LOGIN + userId);
-        if (Objects.isNull(user)) {
-            log.info("用户{}未登录,请求接口{}",userId,path);
-            throw new ServiceException("用户未登录!");
+        token=token.replace(JwtUtil.TOKEN_PREFIX,"");
+        String redisToken = redisUtil.getCacheObject(StringConstant.REDIS_TOKEN + userInfo.getUserId());
+        if (redisToken==null||!redisToken.equals(token)) {
+            log.info("token错误");
+            throw new ServiceException(200,"token错误");
         }
-        log.info("用户{},访问接口放行{}：",userId,path);
+        log.info("用户{},访问接口放行{}：",userInfo.getUserId(),path);
         return chain.filter(exchange);
 
     }

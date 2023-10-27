@@ -35,7 +35,7 @@ public class GlobalExceptionHandler extends DefaultErrorWebExceptionHandler {
         String errorMessage;
         Throwable error = super.getError(request);
         if (error instanceof ServiceException) {
-            code = 200;
+            code = ((ServiceException) error).getErrorCode();
         }
         errorMessage = error.getMessage();
         log.error("异常信息:{}", errorMessage);

@@ -1,25 +1,35 @@
 package com.atvv.im.common.utils;
 
 
+import com.alibaba.fastjson.JSON;
 import com.atvv.im.common.model.dto.UserInfo;
+
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
  * @author hjq
  * @date 2023/9/11 21:58
  */
+@Slf4j
 public class JwtUtil {
     /**
      * token过期时间 12小时
      */
     public static final Long EXPIRED_TIME =60 * 1000L;
+    /**
+     * token前缀
+     */
+    public static final String TOKEN_PREFIX = "Bearer ";
 
     /**
      * 私钥
@@ -35,7 +45,7 @@ public class JwtUtil {
         return new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
     }
 
-    private static JwtBuilder getJwtBuilder(String subject, Long ttlMillis, String uuid) {
+    private static JwtBuilder getJwtBuilder(UserInfo userInfo, Long ttlMillis, String uuid) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         SecretKey secretKey = generalKey();
         long nowMillis = System.currentTimeMillis();
@@ -49,7 +59,7 @@ public class JwtUtil {
                 //唯一的ID
                 .setId(uuid)
                 // 主题  userId
-                .setSubject(subject)
+                .setSubject(JSON.toJSONString(userInfo))
                 // 签发者
                 .setIssuer(KEY)
                 // 签发时间
@@ -62,22 +72,22 @@ public class JwtUtil {
 
     /**
      * 生成jtw
-     * @param subject token中要存放的数据（userid）
+     * @param userInfo 用户信息
      * @return token
      */
-    public static String createJWT(String subject) {
-        JwtBuilder builder = getJwtBuilder(subject, null, getUUID());
+    public static String createJWT(UserInfo userInfo) {
+        JwtBuilder builder = getJwtBuilder(userInfo, null, getUUID());
         return builder.compact();
     }
 
     /**
      * 生成jtw TODO token中存放 userInfo
-     * @param subject token中要存放的数据（userid）
+     * @param userInfo 用户信息
      * @param ttlMillis token超时时间
      * @return token
      */
-    public static String createJWT(String subject, Long ttlMillis) {
-        JwtBuilder builder = getJwtBuilder(subject, ttlMillis, getUUID());
+    public static String createJWT(UserInfo userInfo, Long ttlMillis) {
+        JwtBuilder builder = getJwtBuilder(userInfo, ttlMillis, getUUID());
         return builder.compact();
     }
 
@@ -94,16 +104,22 @@ public class JwtUtil {
      * @throws Exception
      */
     public static Claims parseJWT(String jwt)  {
-        SecretKey secretKey = generalKey();
-        try{
-            return Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(jwt)
-                    .getBody();
-        }catch (ExpiredJwtException e){
-            return e.getClaims();
+        if (StringUtils.hasText(jwt)){
+            String token = jwt.replace(TOKEN_PREFIX, "");
+            SecretKey secretKey = generalKey();
+            try{
+                return Jwts.parser()
+                        .setSigningKey(secretKey)
+                        .parseClaimsJws(token)
+                        .getBody();
+            }catch (ExpiredJwtException e){
+                return e.getClaims();
+            }catch (Exception e){
+                log.error("token解析异常",e);
+            }
         }
 
+        return null;
     }
 
     /**
@@ -112,8 +128,7 @@ public class JwtUtil {
      * @return
      */
     public static UserInfo getCurrentUser(String token) {
-        UserInfo userInfo = new UserInfo();
-        userInfo.setUserId(Long.valueOf(parseJWT(token).getSubject()));
-        return userInfo;
+        String subject = Objects.requireNonNull(parseJWT(token)).getSubject();
+        return JSON.parseObject(subject, UserInfo.class);
     }
 }

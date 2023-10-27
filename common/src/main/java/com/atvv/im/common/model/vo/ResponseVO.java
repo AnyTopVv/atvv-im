@@ -26,7 +26,7 @@ public class ResponseVO<T> {
 
     public ResponseVO(Integer code, T data) {
         this.code = code;
-        this.msg = msg;
+        this.data = data;
     }
 
 
