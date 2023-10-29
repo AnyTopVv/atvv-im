@@ -3,11 +3,7 @@ package com.atvv.im.common.codec.proto;
 import lombok.Data;
 
 /**
- * @ClassName Message
- * @Description
- * @date 2023/4/24 16:30
- * @Author yanceysong
- * @Version 1.0
+ * 消息
  */
 @Data
 public class Message {

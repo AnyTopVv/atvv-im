@@ -71,7 +71,7 @@ public class ImServer {
 //                        pipeline.addLast(new HeartBeatHandler(config.getHeartBeatTime()));
                         pipeline.addLast(new WebSocketMessageDecoderHandler());
                         pipeline.addLast(new WebSocketMessageEncoderHandler());
-                        pipeline.addLast(new NettyServerHandler());
+                        pipeline.addLast(new NettyServerHandler(config.getBrokerId()));
                     }
                 });
     }

@@ -16,4 +16,6 @@ import lombok.ToString;
 @ToString(doNotUseGetters=true)
 public class LoginPack {
     private String userId;
+
+    private String token;
 }

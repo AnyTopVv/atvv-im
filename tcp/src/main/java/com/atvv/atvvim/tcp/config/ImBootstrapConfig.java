@@ -31,6 +31,8 @@ public class ImBootstrapConfig {
          */
         private Integer webSocketPort;
 
+        private Integer brokerId;
+
         /**
          * boss 线程数 默认为 1
          */

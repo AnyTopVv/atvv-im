@@ -5,12 +5,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.atvv.atvvim.tcp.constants.ChannelConstants;
 import com.atvv.atvvim.tcp.model.dto.UserClientDto;
+import com.atvv.atvvim.tcp.utils.RedisManager;
 import com.atvv.atvvim.tcp.utils.UserChannelRepository;
 import com.atvv.im.common.codec.proto.Message;
 import com.atvv.im.common.codec.pack.LoginPack;
+import com.atvv.im.common.constant.RedisConstants;
+import com.atvv.im.common.model.dto.UserRedisSession;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RMap;
+import org.redisson.api.RedissonClient;
 
 /**
  * 登录命令执行策略
@@ -32,6 +37,18 @@ public class LoginSystemCommand extends BaseSystemCommandStrategy{
         ctx.channel().attr(AttributeKey.valueOf(ChannelConstants.USER_ID)).set(userClientDto.getUserId());
         ctx.channel().attr(AttributeKey.valueOf(ChannelConstants.CLIENT_TYPE)).set(userClientDto.getClientType());
         UserChannelRepository.bind(userClientDto,ctx.channel());
+
+        UserRedisSession userRedisSession = new UserRedisSession();
+        userRedisSession.setUserId(loginPack.getUserId());
+        userRedisSession.setClientType(msg.getMessageHeader().getClientType());
+        userRedisSession.setVersion(msg.getMessageHeader().getVersion());
+        userRedisSession.setToken(loginPack.getToken());
+        userRedisSession.setBrokerId(commandExecution.getBrokeId());
+        RedissonClient redissonClient = RedisManager.getRedissonClient();
+        RMap<String, String> map = redissonClient
+                .getMap(RedisConstants.USER_SESSION + ":"
+                        + loginPack.getUserId());
+        map.put(String.valueOf(msg.getMessageHeader().getClientType()), JSONObject.toJSONString(userRedisSession));
         log.info("登录成功：userId: {}",loginPack.getUserId());
     }
 }
