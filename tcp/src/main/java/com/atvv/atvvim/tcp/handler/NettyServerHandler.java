@@ -24,9 +24,8 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
 
     private final Integer brokerId;
 
-    public NettyServerHandler() {
-        int uuid= UUID.randomUUID().toString().replaceAll("-","").hashCode();
-        brokerId = uuid < 0 ? -uuid : uuid;
+    public NettyServerHandler(Integer brokerId) {
+        this.brokerId = brokerId;
     }
 
     /**

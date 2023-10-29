@@ -106,16 +106,6 @@
                 <version>${netty.version}</version>
             </dependency>
 
-            <!--         rabbitmq-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-amqp</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>com.rabbitmq</groupId>
-                <artifactId>amqp-client</artifactId>
-            </dependency>
-
             <!--            jwt-->
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
@@ -134,6 +124,12 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-bootstrap</artifactId>
                 <version>3.0.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redisson.version}</version>
             </dependency>
         </dependencies>
 
