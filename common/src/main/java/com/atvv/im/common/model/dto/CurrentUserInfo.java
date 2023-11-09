@@ -10,21 +10,21 @@ public class CurrentUserInfo {
     /**
      * 当前线程的UserInfo
      */
-    public static final ThreadLocal<UserInfo> CURRENT_THREAD_USER_INFO = new ThreadLocal<>();
+    public static final ThreadLocal<Long> CURRENT_THREAD_USER_INFO = new ThreadLocal<>();
 
     /**
      * 设置当前线程的UserInfo对象
-     * @param userInfo
+     * @param userId
      */
-    public static void set(UserInfo userInfo) {
-        CURRENT_THREAD_USER_INFO.set(Objects.requireNonNull(userInfo));
+    public static void set(Long userId) {
+        CURRENT_THREAD_USER_INFO.set(Objects.requireNonNull(userId));
     }
 
     /**
      * 从当前线程获取UserInfo对象
      * @return 当前线程下的UserInfo对象
      */
-    public static UserInfo get() {
+    public static Long get() {
         return Objects.requireNonNull(CURRENT_THREAD_USER_INFO.get());
     }
 

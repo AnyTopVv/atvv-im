@@ -1,4 +1,4 @@
-package com.atvv.im.common.common.gateway.exception;
+package com.atvv.im.gateway.exception;
 
 
 import com.atvv.im.common.constant.enums.common.ErrorCode;
@@ -13,17 +13,6 @@ public class ServiceException extends RuntimeException {
     private Integer errorCode;
 
     private String errorMessage;
-
-    public ServiceException(String errorMessage) {
-        super(errorMessage);
-        this.errorMessage=errorMessage;
-    }
-
-    public ServiceException(Integer errorCode,String errorMessage){
-        super(errorMessage);
-        this.errorCode=errorCode;
-        this.errorMessage=errorMessage;
-    }
 
     public ServiceException(ErrorCode errorCode) {
         super(errorCode.getMsg());

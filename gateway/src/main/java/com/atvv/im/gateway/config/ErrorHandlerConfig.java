@@ -1,9 +1,9 @@
-package com.atvv.im.common.common.gateway.config;
+package com.atvv.im.gateway.config;
 
 import java.util.Collections;
 import java.util.List;
 
-import com.atvv.im.common.common.gateway.handler.GlobalExceptionHandler;
+import com.atvv.im.gateway.handler.GlobalExceptionHandler;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.SearchStrategy;

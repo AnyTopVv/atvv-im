@@ -1,19 +1,16 @@
 package com.atvv.im.common.utils;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.asymmetric.AsymmetricAlgorithm;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
-import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.DigestUtil;
-import cn.hutool.crypto.digest.Digester;
 
 
 /**
  * @author hjq
  * @date 2023/10/27 11:07
  */
-public class PasswordUtil {
+public class SecureUtil {
     /**
      * 私钥
      */

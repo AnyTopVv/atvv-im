@@ -20,7 +20,7 @@ public class UserInfoInterceptor implements HandlerInterceptor {
 		String token = request.getHeader("authorization");
 		// 考虑到可能存在无token的情况
 		if (token != null && !token.isEmpty()) {
-			CurrentUserInfo.set(JwtUtil.getCurrentUser(token));
+			CurrentUserInfo.set(JwtUtil.getLoginUserId(token));
 		}
 		return true;
 	}

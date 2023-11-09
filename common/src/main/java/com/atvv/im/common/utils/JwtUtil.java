@@ -4,6 +4,11 @@ package com.atvv.im.common.utils;
 import com.alibaba.fastjson.JSON;
 import com.atvv.im.common.model.dto.UserInfo;
 
+import com.atvv.im.common.model.po.User;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -11,10 +16,7 @@ import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
-import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author hjq
@@ -25,110 +27,72 @@ public class JwtUtil {
     /**
      * token过期时间 12小时
      */
-    public static final Long EXPIRED_TIME =60 * 1000L;
-    /**
-     * token前缀
-     */
-    public static final String TOKEN_PREFIX = "Bearer ";
+    public static final Long EXPIRED_TIME = 60 * 1000L;
+
 
     /**
-     * 私钥
+     * 签名
      */
-    public static final String KEY = "ATVVIM";
+    private static final String SIGN = "atvv";
 
-    /**
-     * 生成加密后的秘钥 secretKey
-     * @return secretKey
-     */
-    public static SecretKey generalKey() {
-        byte[] encodedKey = Base64.getDecoder().decode(JwtUtil.KEY);
-        return new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
+    public static String createJwt(User user) {
+        return createJwt(user, null);
     }
 
-    private static JwtBuilder getJwtBuilder(UserInfo userInfo, Long ttlMillis, String uuid) {
-        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-        SecretKey secretKey = generalKey();
+    /**
+     * 创建jwt
+     *
+     * @param user 用户
+     * @return jwt
+     */
+    public static String createJwt(User user, Long ttlMillis) {
+        //jwt 头部信息
+        Map<String, Object> map = new HashMap<>();
+
         long nowMillis = System.currentTimeMillis();
-        Date now = new Date(nowMillis);
-        if(ttlMillis==null){
-            ttlMillis=JwtUtil.EXPIRED_TIME;
+        if (ttlMillis == null) {
+            ttlMillis = JwtUtil.EXPIRED_TIME;
         }
         long expMillis = nowMillis + ttlMillis;
         Date expDate = new Date(expMillis);
-        return Jwts.builder()
-                //唯一的ID
-                .setId(uuid)
-                // 主题  userId
-                .setSubject(JSON.toJSONString(userInfo))
-                // 签发者
-                .setIssuer(KEY)
-                // 签发时间
-                .setIssuedAt(now)
-                //使用HS256对称加密算法签名, 第二个参数为秘钥
-                .signWith(signatureAlgorithm, secretKey)
-                .setExpiration(expDate);
-    }
 
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(user.getId());
+        userInfo.setName(user.getName());
+        userInfo.setPhone(user.getPhone());
+        userInfo.setEmail(user.getEmail());
 
-    /**
-     * 生成jtw
-     * @param userInfo 用户信息
-     * @return token
-     */
-    public static String createJWT(UserInfo userInfo) {
-        JwtBuilder builder = getJwtBuilder(userInfo, null, getUUID());
-        return builder.compact();
+        String token = JWT.create()
+                .withHeader(map)
+                .withClaim("userId", 1)
+                .withExpiresAt(expDate) //过期时间
+                .sign(Algorithm.HMAC256(SIGN));
+        return token;
     }
 
     /**
-     * 生成jtw TODO token中存放 userInfo
-     * @param userInfo 用户信息
-     * @param ttlMillis token超时时间
-     * @return token
-     */
-    public static String createJWT(UserInfo userInfo, Long ttlMillis) {
-        JwtBuilder builder = getJwtBuilder(userInfo, ttlMillis, getUUID());
-        return builder.compact();
-    }
-
-    public static String getUUID(){
-        return UUID.randomUUID().toString().replaceAll("-", "");
-    }
-
-
-    /**
-     * 解析
+     * 验证jwt是否有效，有效则返回true
      *
-     * @param jwt token
+     * @param jwt jwt
      * @return
-     * @throws Exception
      */
-    public static Claims parseJWT(String jwt)  {
-        if (StringUtils.hasText(jwt)){
-            String token = jwt.replace(TOKEN_PREFIX, "");
-            SecretKey secretKey = generalKey();
-            try{
-                return Jwts.parser()
-                        .setSigningKey(secretKey)
-                        .parseClaimsJws(token)
-                        .getBody();
-            }catch (ExpiredJwtException e){
-                return e.getClaims();
-            }catch (Exception e){
-                log.error("token解析异常",e);
-            }
-        }
-
-        return null;
+    public static boolean verifyJwt(String jwt) {
+        // 通过签名生成验证对象
+        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(SIGN)).build();
+        DecodedJWT verify = jwtVerifier.verify(jwt);
+        return verify.getExpiresAt().after(new Date());
     }
 
     /**
-     * TODO 获取jwt当前用户
-     * @param token
-     * @return
+     * 通过jwt获取userId
+     *
+     * @param jwt jwt
+     * @return userId
      */
-    public static UserInfo getCurrentUser(String token) {
-        String subject = Objects.requireNonNull(parseJWT(token)).getSubject();
-        return JSON.parseObject(subject, UserInfo.class);
+    public static Long getLoginUserId(String jwt) {
+        // 通过签名生成验证对象
+        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(SIGN)).build();
+        DecodedJWT verify = jwtVerifier.verify(jwt);
+        return verify.getClaim("userId").asLong();
     }
 }

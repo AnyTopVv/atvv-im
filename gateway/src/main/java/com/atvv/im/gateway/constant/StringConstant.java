@@ -1,4 +1,4 @@
-package com.atvv.im.common.common.gateway.constant;
+package com.atvv.im.gateway.constant;
 
 /**
  * @author hjq
@@ -7,5 +7,4 @@ package com.atvv.im.common.common.gateway.constant;
 public class StringConstant {
     public static final String AUTHORIZATION = "authorization";
 
-    public static final String REDIS_TOKEN = "token:";
 }

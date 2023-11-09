@@ -1,4 +1,4 @@
-package com.atvv.im.common.common.gateway;
+package com.atvv.im.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
