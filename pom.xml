@@ -33,6 +33,7 @@
         <module>gateway</module>
         <module>common</module>
         <module>chat</module>
+        <module>codec</module>
     </modules>
 
     <dependencyManagement>

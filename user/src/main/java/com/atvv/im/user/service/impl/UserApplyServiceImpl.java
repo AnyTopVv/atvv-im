@@ -27,7 +27,7 @@ public class UserApplyServiceImpl implements UserApplyService {
 
     @Override
     public void addApply(ApplyDTO applyDto) {
-        Long applicantId = CurrentUserInfo.get().getUserId();
+        Long applicantId = CurrentUserInfo.get();
         //判断是否已加为好友或进入群聊
         if (applyDto.getType().equals(CommonType.FRIEND.getCode())){
             if (friendShipDao.isFriend(applicantId,applyDto.getTargetId())){
@@ -63,7 +63,7 @@ public class UserApplyServiceImpl implements UserApplyService {
         UserApply userApply = userApplyDao.findById(applyReplyDTO.getUserApplyId());
         if (userApply != null){
             //判断是否有权利处理
-            if (userApply.getType().equals(CommonType.FRIEND.getCode()) && userApply.getTargetId().equals(CurrentUserInfo.get().getUserId())){
+            if (userApply.getType().equals(CommonType.FRIEND.getCode()) && userApply.getTargetId().equals(CurrentUserInfo.get())){
                 FriendShip friendShip = new FriendShip();
                 friendShip.setTargetId(userApply.getTargetId());
                 friendShip.setOriginId(userApply.getApplicantId());

@@ -1,14 +1,12 @@
 package com.atvv.atvvim.tcp.strategy.command;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.atvv.atvvim.tcp.constants.ChannelConstants;
 import com.atvv.atvvim.tcp.model.dto.UserClientDto;
 import com.atvv.atvvim.tcp.utils.RedisManager;
 import com.atvv.atvvim.tcp.utils.UserChannelRepository;
 import com.atvv.im.codec.proto.Message;
-import com.atvv.im.common.codec.pack.LoginPack;
+import com.atvv.im.codec.proto.MessagePack;
 import com.atvv.im.common.constant.RedisConstants;
 import com.atvv.im.common.model.dto.UserRedisSession;
 import io.netty.channel.ChannelHandlerContext;
@@ -26,11 +24,10 @@ public class LoginSystemCommand extends BaseSystemCommandStrategy{
     public void systemStrategy(CommandExecution commandExecution) {
         Message msg = commandExecution.getMsg();
         ChannelHandlerContext ctx = commandExecution.getCtx();
-        LoginPack loginPack = JSON.parseObject(JSONObject.toJSONString(msg.getMessagePack()),
-                new TypeReference<LoginPack>() {}.getType());
+        MessagePack<?> messagePack = msg.getMessagePack();
         //解析到msg组装UserDTO
         UserClientDto userClientDto = new UserClientDto();
-        userClientDto.setUserId(loginPack.getUserId());
+        userClientDto.setUserId(messagePack.getUserId());
         userClientDto.setClientType(msg.getMessageHeader().getClientType());
 
         // channel 设置属性
@@ -39,16 +36,16 @@ public class LoginSystemCommand extends BaseSystemCommandStrategy{
         UserChannelRepository.bind(userClientDto,ctx.channel());
 
         UserRedisSession userRedisSession = new UserRedisSession();
-        userRedisSession.setUserId(loginPack.getUserId());
+        userRedisSession.setUserId(messagePack.getUserId());
         userRedisSession.setClientType(msg.getMessageHeader().getClientType());
         userRedisSession.setVersion(msg.getMessageHeader().getVersion());
-        userRedisSession.setToken(loginPack.getToken());
+        userRedisSession.setToken("temp:none");
         userRedisSession.setBrokerId(commandExecution.getBrokeId());
         RedissonClient redissonClient = RedisManager.getRedissonClient();
         RMap<String, String> map = redissonClient
                 .getMap(RedisConstants.USER_SESSION + ":"
-                        + loginPack.getUserId());
+                        + messagePack.getMessageId());
         map.put(String.valueOf(msg.getMessageHeader().getClientType()), JSONObject.toJSONString(userRedisSession));
-        log.info("登录成功：userId: {}",loginPack.getUserId());
+        log.info("登录成功：userId: {}",messagePack.getMessageId());
     }
 }

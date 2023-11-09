@@ -27,6 +27,6 @@ public class MessagePack<T> implements Serializable {
     private Integer command;
 
 
-    private T messageBody;
+    private Object messageBody;
 
 }
