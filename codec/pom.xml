@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.atvv.im</groupId>
         <artifactId>backend</artifactId>
         <version>1.0</version>
     </parent>
-    <artifactId>tcp</artifactId>
-    <name>tcp</name>
-    <description>聊天功能</description>
+    <artifactId>codec</artifactId>
+    <name>codec</name>
+    <description>消息编码模块</description>
     <dependencies>
         <!--  父pom文件 -->
         <dependency>
@@ -18,56 +18,20 @@
             <version>1.0</version>
             <type>pom</type>
         </dependency>
-
         <dependency>
             <groupId>com.atvv.im</groupId>
             <artifactId>common</artifactId>
             <version>1.0</version>
         </dependency>
-
+        <!--redis依赖-->
         <dependency>
-            <groupId>com.atvv.im</groupId>
-            <artifactId>codec</artifactId>
-            <version>1.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-
+        <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-        </dependency>
-
-        <!-- rabbitmq-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.rabbitmq</groupId>
-            <artifactId>amqp-client</artifactId>
-        </dependency>
-
-        <!-- redisson-->
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
         </dependency>
     </dependencies>
 
@@ -88,7 +52,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.6.13</version>
                 <configuration>
-                    <mainClass>com.atvv.atvvim.tcp.Starter</mainClass>
+                    <mainClass>com.atvv.im.chat.ChatApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

@@ -2,11 +2,10 @@ package com.atvv.atvvim.tcp.service.rabbitmq;
 
 import com.alibaba.fastjson.JSONObject;
 import com.atvv.atvvim.tcp.utils.UserChannelRepository;
-import com.atvv.im.common.codec.proto.MessagePack;
+import com.atvv.im.codec.proto.MessagePack;
 import com.atvv.im.common.constant.RabbitmqConstants;
 import com.rabbitmq.client.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -43,7 +42,7 @@ public class MessageListener {
                             try {
                                 log.info("服务端监听消息信息为 {} ", msgStr);
                                 // 消息写入数据通道
-                                MessagePack messagePack = JSONObject.parseObject(msgStr, MessagePack.class);
+                                MessagePack<?> messagePack = JSONObject.parseObject(msgStr, MessagePack.class);
                                 io.netty.channel.Channel userChannel = UserChannelRepository.getUserChannel(messagePack.getReceiverId(), messagePack.getClientType());
                                 // 消息成功写入通道后发送应答 Ack
                                 if (Objects.nonNull(userChannel)) {

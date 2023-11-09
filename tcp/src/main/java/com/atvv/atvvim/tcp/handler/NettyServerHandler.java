@@ -4,7 +4,7 @@ package com.atvv.atvvim.tcp.handler;
 import com.atvv.atvvim.tcp.strategy.command.CommandExecution;
 import com.atvv.atvvim.tcp.strategy.command.CommandFactory;
 import com.atvv.atvvim.tcp.strategy.command.SystemCommandStrategy;
-import com.atvv.im.common.codec.proto.Message;
+import com.atvv.im.codec.proto.Message;
 import com.atvv.atvvim.tcp.utils.UserChannelRepository;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

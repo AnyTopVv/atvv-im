@@ -4,7 +4,7 @@ package com.atvv.im.common.constant.enums.command;
  * 聊天消息事件
  */
 public enum MessageCommand implements Command {
-    //单聊消息 1103
+    //单聊消息
     MSG_P2P(0x44F),
 
     // 单聊消息ACK 1046

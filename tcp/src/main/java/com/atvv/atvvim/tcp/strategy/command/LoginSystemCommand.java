@@ -7,7 +7,7 @@ import com.atvv.atvvim.tcp.constants.ChannelConstants;
 import com.atvv.atvvim.tcp.model.dto.UserClientDto;
 import com.atvv.atvvim.tcp.utils.RedisManager;
 import com.atvv.atvvim.tcp.utils.UserChannelRepository;
-import com.atvv.im.common.codec.proto.Message;
+import com.atvv.im.codec.proto.Message;
 import com.atvv.im.common.codec.pack.LoginPack;
 import com.atvv.im.common.constant.RedisConstants;
 import com.atvv.im.common.model.dto.UserRedisSession;

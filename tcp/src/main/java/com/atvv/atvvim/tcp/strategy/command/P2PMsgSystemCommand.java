@@ -4,12 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.atvv.atvvim.tcp.service.rabbitmq.MessageProducer;
 import com.atvv.atvvim.tcp.utils.RedisManager;
-import com.atvv.atvvim.tcp.utils.UserChannelRepository;
 import com.atvv.im.common.constant.RedisConstants;
-import com.atvv.im.common.constant.enums.device.ClientType;
-import com.atvv.im.common.codec.proto.Message;
-import com.atvv.im.common.codec.proto.MessagePack;
-import io.netty.channel.Channel;
+import com.atvv.im.codec.proto.Message;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RMap;
@@ -22,6 +18,7 @@ import java.util.Set;
  */
 @Slf4j
 public class P2PMsgSystemCommand extends BaseSystemCommandStrategy{
+
     @Override
     public void systemStrategy(CommandExecution commandExecution) {
         Message msg = commandExecution.getMsg();
