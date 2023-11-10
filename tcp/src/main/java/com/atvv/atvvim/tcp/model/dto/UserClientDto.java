@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserClientDto {
-    private String userId;
+
+    private Long userId;
     private Integer clientType;
+
 }

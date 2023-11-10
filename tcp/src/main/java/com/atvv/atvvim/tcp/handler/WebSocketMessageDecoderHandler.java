@@ -1,6 +1,6 @@
 package com.atvv.atvvim.tcp.handler;
 
-import com.atvv.im.common.codec.proto.Message;
+import com.atvv.im.codec.proto.Message;
 import com.atvv.atvvim.tcp.utils.ByteBufToMessageUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

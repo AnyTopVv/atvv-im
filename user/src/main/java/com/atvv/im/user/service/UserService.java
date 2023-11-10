@@ -2,6 +2,9 @@ package com.atvv.im.user.service;
 
 import com.atvv.im.common.model.vo.ResponseVO;
 import com.atvv.im.common.model.po.User;
+import com.atvv.im.user.model.dto.LoginDto;
+import com.atvv.im.user.model.dto.RegisterDto;
+import com.atvv.im.user.model.vo.LoginVo;
 
 /**
  * @author hjq
@@ -10,29 +13,22 @@ import com.atvv.im.common.model.po.User;
 public interface UserService {
     /**
      * 登录
-     * @param user 用户信息
+     * @param loginDto 用户信息
      * @return 结果
      */
-    ResponseVO<?> login(User user);
-
-    /**
-     * 退出
-     * @return 结果
-     */
-    ResponseVO<?> logout();
-
+    LoginVo login(LoginDto loginDto);
 
     /**
      * 刷新token
      * @param refreshToken refreshToken
      * @return 结果
      */
-    ResponseVO<?> refreshToken(String refreshToken);
+    LoginVo refreshToken(String refreshToken);
 
     /**
      * 注册
      * @param user 用户信息
      * @return 结果
      */
-    ResponseVO<?> register(User user);
+    void register(RegisterDto registerDto);
 }

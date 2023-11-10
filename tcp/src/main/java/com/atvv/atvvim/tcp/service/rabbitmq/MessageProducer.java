@@ -2,7 +2,8 @@ package com.atvv.atvvim.tcp.service.rabbitmq;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.atvv.im.common.codec.proto.Message;
+import com.atvv.im.codec.proto.Message;
+import com.atvv.im.codec.proto.MessagePack;
 import com.atvv.im.common.constant.RabbitmqConstants;
 import com.atvv.im.common.constant.enums.common.CommonType;
 import com.rabbitmq.client.Channel;
@@ -23,19 +24,17 @@ public class MessageProducer {
         if (commandTypeCode.equals(CommonType.MESSAGE.getCode())) {
             channelName = RabbitmqConstants.MESSAGE_SERVICE2_IM;
         }else {
-            log.info("占不支持其他类型消息");
+            log.info("暂不支持其他类型消息");
             return;
         }
         Channel channel;
         try {
             channel = MqFactory.getChannel(channelName);
             // 解析私有协议的内容
-            JSONObject o = (JSONObject) JSON.toJSON(message.getMessagePack());
-            o.put("userId",o.get("sendId"));
-            o.put("command",command);
-            o.put("data",o.get("messageBody"));
+            MessagePack<?> messagePack = message.getMessagePack();
+            messagePack.setCommand(message.getMessageHeader().getCommand());
             channel.basicPublish(channelName, "",
-                    null, o.toJSONString().getBytes());
+                    null, JSON.toJSONBytes(messagePack));
         } catch (Exception e) {
             log.error("发送消息出现异常：{}", e.getMessage());
         }

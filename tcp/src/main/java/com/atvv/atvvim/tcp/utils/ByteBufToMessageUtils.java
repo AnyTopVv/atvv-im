@@ -1,9 +1,11 @@
 package com.atvv.atvvim.tcp.utils;
 
-import com.alibaba.fastjson.JSONObject;
-import com.atvv.im.common.codec.proto.Message;
-import com.atvv.im.common.codec.proto.MessageHeader;
+import com.alibaba.fastjson.JSON;
+import com.atvv.im.codec.proto.Message;
+import com.atvv.im.codec.proto.MessageHeader;
+import com.atvv.im.codec.proto.MessagePack;
 import io.netty.buffer.ByteBuf;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 将ByteBuf转化为Message实体，根据私有协议转换
@@ -15,23 +17,24 @@ import io.netty.buffer.ByteBuf;
  * 4位表示数据长度
  * data
  */
+@Slf4j
 public class ByteBufToMessageUtils {
 
     public static Message transition(ByteBuf in){
 
-        /** 获取command*/
+        // 获取command
         int command = in.readInt();
 
-        /** 获取version*/
+        // 获取version
         int version = in.readInt();
 
-        /** 获取clientType*/
+        // 获取clientType
         int clientType = in.readInt();
 
-        /** 获取messageType*/
+        // 获取messageType
         int messageType = in.readInt();
 
-        /** 获取bodyLen*/
+        // 获取bodyLen*
         int bodyLen = in.readInt();
 
         if(in.readableBytes() < bodyLen){
@@ -53,8 +56,8 @@ public class ByteBufToMessageUtils {
 
         if(messageType == 0x0){
             String body = new String(bodyData);
-            JSONObject parse = (JSONObject) JSONObject.parse(body);
-            message.setMessagePack(parse);
+            MessagePack messagePack = JSON.parseObject(body, MessagePack.class);
+            message.setMessagePack(messagePack);
         }
 
         in.markReaderIndex();

@@ -67,7 +67,7 @@ public class UserChannelRepository {
      * @return UserClientDto
      */
     public static UserClientDto getUserInfo(Channel channel) {
-        String userId = (String) channel.attr(AttributeKey.valueOf(ChannelConstants.USER_ID)).get();
+        Long userId = (Long) channel.attr(AttributeKey.valueOf(ChannelConstants.USER_ID)).get();
         Integer clientType = (Integer) channel.attr(AttributeKey.valueOf(ChannelConstants.CLIENT_TYPE)).get();
         return new UserClientDto(userId, clientType);
     }
@@ -79,7 +79,7 @@ public class UserChannelRepository {
      * @param clientType 客户端类型
      * @return 用户的channel
      */
-    public static Channel getUserChannel(String userId, Integer clientType) {
+    public static Channel getUserChannel(Long userId, Integer clientType) {
         UserClientDto dto = new UserClientDto();
         dto.setUserId(userId);
         dto.setClientType(clientType);
