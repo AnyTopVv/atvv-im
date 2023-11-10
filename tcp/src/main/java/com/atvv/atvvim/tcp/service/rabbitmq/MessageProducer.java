@@ -24,7 +24,7 @@ public class MessageProducer {
         if (commandTypeCode.equals(CommonType.MESSAGE.getCode())) {
             channelName = RabbitmqConstants.MESSAGE_SERVICE2_IM;
         }else {
-            log.info("占不支持其他类型消息");
+            log.info("暂不支持其他类型消息");
             return;
         }
         Channel channel;
@@ -33,7 +33,6 @@ public class MessageProducer {
             // 解析私有协议的内容
             MessagePack<?> messagePack = message.getMessagePack();
             messagePack.setCommand(message.getMessageHeader().getCommand());
-//            messagePack.setUserId();
             channel.basicPublish(channelName, "",
                     null, JSON.toJSONBytes(messagePack));
         } catch (Exception e) {

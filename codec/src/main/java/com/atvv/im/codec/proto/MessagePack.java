@@ -8,12 +8,12 @@ import java.io.Serializable;
 @Data
 public class MessagePack<T> implements Serializable {
 
-    private String userId;
+    private Long userId;
 
     /**
      * 接收方
      */
-    private String receiverId;
+    private Long receiverId;
 
     /**
      * 客户端标识
@@ -21,12 +21,20 @@ public class MessagePack<T> implements Serializable {
     private int clientType;
 
 
+    /**
+     * uuid 由客户端生成
+     */
     private String messageId;
 
-
+    /**
+     * 指令
+     */
     private Integer command;
 
 
+    /**
+     * 消息体
+     */
     private Object messageBody;
 
 }

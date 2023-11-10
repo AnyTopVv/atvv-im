@@ -36,6 +36,7 @@ public class MessageListener {
             channel.basicConsume(RabbitmqConstants.MESSAGE_SERVICE2_IM + brokerId
                     , false,
                     new DefaultConsumer(channel) {
+
                         @Override
                         public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                             String msgStr = new String(body, StandardCharsets.UTF_8);

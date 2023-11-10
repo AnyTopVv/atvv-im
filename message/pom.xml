@@ -7,7 +7,7 @@
         <artifactId>backend</artifactId>
         <version>1.0</version>
     </parent>
-    <artifactId>chat</artifactId>
+    <artifactId>message</artifactId>
     <name>chat</name>
     <description>聊天模块</description>
     <dependencies>
@@ -62,7 +62,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.6.13</version>
                 <configuration>
-                    <mainClass>com.atvv.im.chat.ChatApplication</mainClass>
+                    <mainClass>com.atvv.im.message.MessageApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

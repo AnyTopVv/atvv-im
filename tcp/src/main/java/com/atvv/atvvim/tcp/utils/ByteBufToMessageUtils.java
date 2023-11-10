@@ -22,19 +22,19 @@ public class ByteBufToMessageUtils {
 
     public static Message transition(ByteBuf in){
 
-        /** 获取command*/
+        // 获取command
         int command = in.readInt();
 
-        /** 获取version*/
+        // 获取version
         int version = in.readInt();
 
-        /** 获取clientType*/
+        // 获取clientType
         int clientType = in.readInt();
 
-        /** 获取messageType*/
+        // 获取messageType
         int messageType = in.readInt();
 
-        /** 获取bodyLen*/
+        // 获取bodyLen*
         int bodyLen = in.readInt();
 
         if(in.readableBytes() < bodyLen){
@@ -56,7 +56,6 @@ public class ByteBufToMessageUtils {
 
         if(messageType == 0x0){
             String body = new String(bodyData);
-            log.debug(body);
             MessagePack messagePack = JSON.parseObject(body, MessagePack.class);
             message.setMessagePack(messagePack);
         }

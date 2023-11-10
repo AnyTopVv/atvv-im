@@ -41,11 +41,12 @@ public class LoginSystemCommand extends BaseSystemCommandStrategy{
         userRedisSession.setVersion(msg.getMessageHeader().getVersion());
         userRedisSession.setToken("temp:none");
         userRedisSession.setBrokerId(commandExecution.getBrokeId());
+        // 将用户消息存入redis
         RedissonClient redissonClient = RedisManager.getRedissonClient();
         RMap<String, String> map = redissonClient
                 .getMap(RedisConstants.USER_SESSION + ":"
-                        + messagePack.getMessageId());
+                        + messagePack.getUserId());
         map.put(String.valueOf(msg.getMessageHeader().getClientType()), JSONObject.toJSONString(userRedisSession));
-        log.info("登录成功：userId: {}",messagePack.getMessageId());
+        log.info("登录成功：userId: {}",messagePack.getUserId());
     }
 }

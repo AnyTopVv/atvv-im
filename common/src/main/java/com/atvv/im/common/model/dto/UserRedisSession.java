@@ -13,7 +13,7 @@ public class UserRedisSession {
     /**
      * 用户id
      */
-    private String userId;
+    private Long userId;
 
     /**
      * 端信息，后续如果有多平台登录限制需要使用到

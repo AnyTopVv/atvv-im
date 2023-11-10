@@ -32,7 +32,7 @@
         <module>tcp</module>
         <module>gateway</module>
         <module>common</module>
-        <module>chat</module>
+        <module>message</module>
         <module>codec</module>
     </modules>
 

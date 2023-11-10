@@ -1,10 +1,10 @@
-package com.atvv.im.chat;
+package com.atvv.im.message;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ChatApplicationTests {
+class MessageApplicationTests {
 
     @Test
     void contextLoads() {
